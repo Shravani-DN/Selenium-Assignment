@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -26,23 +27,9 @@ public class Assignment {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get("https://www.naturesbasket.co.in/");   //point 3
         Thread.sleep(1000);
-//        Alert alert = driver.switchTo().alert();
-//        alert.dismiss();
-//        Set<String> wnd = driver.getWindowHandles();
-//        // window handles iteration
-//        Iterator<String> i = wnd.iterator();
-//        String prntw = i.next();
-//        String popwnd = i.next();
-//        // switching pop up window handle id
-//        driver.switchTo().window(popwnd);
-//        System.out.println("Page title of popup: "+ driver.getTitle());
-//        // closes pop up window
-//        driver.close();
-//        // switching parent window handle id
-//        driver.switchTo().window(prntw);
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(By.id("btnClosePopUpBox"))).build().perform();    //point 4
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         driver.findElement(By.id("btnPinOk")).click();
         Thread.sleep(2000);
         Select objSelect =new Select(driver.findElement(By.id("ctl00_ddlCitySearch")));
@@ -64,22 +51,45 @@ public class Assignment {
         Thread.sleep(2000);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0,500)", "");          //point 9
+        driver.findElement(By.xpath("//div[@class='search_AddCart1 ']")).click();
+        driver.findElement(By.xpath("//input[@placeholder='Delivery pincode']")).sendKeys("560001");
+        driver.findElement(By.id("btnAddPin")).click();
+        driver.findElement(By.id("btnAddPin")).click();
+        driver.findElement(By.xpath("//div[@class='search_AddCart1 ']")).click();
         driver.findElement(By.xpath("//a[text()='Ferrero Rocher Gift Pack 200G (16 P..']")).click();  //point 10
         Thread.sleep(2000);
         String chocolateTitle = driver.findElement(By.xpath("(//h1[@class='pd_Title'])[1]")).getText();
-       // driver.findElement(By.xpath("(//h1[@class='pd_Title'])[1]")).sendKeys(Keys.CONTROL,"c");
-       // driver.findElement (By.xpath("/html/body/main/div/div/div[2]/div/div/div[2]/div/table/tbody/tr[2]/td[2]")).sendKeys(Keys.chord(Keys.CONTROL, "v"));
-        System.out.println(chocolateTitle);   //point 11
+       System.out.println(chocolateTitle);   //point 11
         driver.navigate().back();  //point 12
         js.executeScript("window.scrollBy(0,2500)", "");   //point 13
         Thread.sleep(2000);
-        driver.findElement(By.id("ctl00_txtNewletter")).sendKeys(chocolateTitle);  //point 14
-        TakesScreenshot screenshot = (TakesScreenshot) driver;
-        File filescrshot = screenshot.getScreenshotAs(OutputType.FILE);
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        FileUtils.copyFile(filescrshot, new File("./Screenshot/"+chocolateTitle+timeStamp+".png"));
+        driver.findElement(By.id("ctl00_txtNewletter")).sendKeys(chocolateTitle);  //point 14 & point 15
+        JavascriptExecutor jsExec = (JavascriptExecutor)driver;
 
+        jsExec.executeScript("window.scrollTo(0, 0);"); //Scroll To Top
 
+        Long innerHeight = (Long) jsExec.executeScript("return window.innerHeight;");
+        Long scroll = innerHeight;
 
-    }
+        Long scrollHeight = (Long) jsExec.executeScript("return document.body.scrollHeight;");
+
+        scrollHeight = scrollHeight + scroll;
+
+        do{
+
+            File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+
+            //Unique File Name For Each Screenshot
+            File destination = new File("E://screenshots//"+String.join("_",
+                    LocalDateTime.now().toString().split("[^A-Za-z0-9]"))+".jpg");
+
+            FileUtils.copyFile(screenshot, destination);
+
+            jsExec.executeScript("window.scrollTo(0, "+innerHeight+");");
+
+            innerHeight = innerHeight + scroll;
+
+        }while(scrollHeight >= innerHeight);
+
+}
 }

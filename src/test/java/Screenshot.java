@@ -27,10 +27,11 @@ public class Screenshot {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         // wait.until(ExpectedConditions.visibilityOf())
         driver.get("https://rahulshettyacademy.com/AutomationPractice/");
-        TakesScreenshot scrshot = (TakesScreenshot) driver;
-        File filescrshot = scrshot.getScreenshotAs(OutputType.FILE);
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        FileUtils.copyFile(filescrshot, new File("./Screenshot/"+timeStamp+"screen.png"));
+        driver.navigate().back();
+//        TakesScreenshot scrshot = (TakesScreenshot) driver;
+//        File filescrshot = scrshot.getScreenshotAs(OutputType.FILE);
+//        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+//        FileUtils.copyFile(filescrshot, new File("./Screenshot/"+timeStamp+"screen.png"));
 
     }
 }

@@ -23,6 +23,7 @@ public class Test1 {
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);  //None>Eager>Normal //speed of browser
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver(options);
+        //driver.
         //driver.get("https://93.90.204.96/VSM3Test/ui/auth/signin");  //desired capabilities
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         options.addArguments("--start-maximized");
